@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyBuildReleaseTest"
+version = "0.1.0"
+authors = [
+    {name = "Nik Lilovski", email = "nik.lilovski@outlook.com"}
+]
+description = "Python port of rBuildReleaseTest"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pandas",
+    "pyodbc"
+]
+
+[project.urls]
+Homepage = "https://github.com/nik01010/pyBuildReleaseTest"
+Issues = "https://github.com/nik01010/pyBuildReleaseTest/issues"
