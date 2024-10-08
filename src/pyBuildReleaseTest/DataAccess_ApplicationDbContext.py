@@ -6,7 +6,7 @@ class ApplicationDbContext:
         connection_driver: str = "ODBC Driver 17 for SQL Server", 
         connection_server: str = "localhost", 
         connection_database: str = "master"
-    ):
+    ) -> None:
         # TODO: add validations
         # TODO: add logging
         self._connection_driver: str = connection_driver
@@ -27,6 +27,8 @@ class ApplicationDbContext:
     def _create_database_connection(self) -> pyodbc.Connection:
         # TODO: add logging
         # TODO: add error handling
+        # TODO: refactor using SQLAlchemy ORM
+        # https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
         database_connection: pyodbc.Connection = pyodbc.connect(self._connection_string)
         
         return(database_connection)
