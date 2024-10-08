@@ -1,28 +1,25 @@
 import pyodbc
+from dataclasses import dataclass
 
-class ApplicationDbContext:
-    def __init__(
-        self, 
-        connection_driver: str = "ODBC Driver 17 for SQL Server", 
-        connection_server: str = "localhost", 
-        connection_database: str = "master"
-    ) -> None:
-        # TODO: add validations
-        # TODO: add logging
-        self._connection_driver: str = connection_driver
-        self._connection_server: str = connection_server
-        self._connection_database: str = connection_database
+@dataclass(frozen = True)
+class ConnectionDetails:
+    connection_driver: str
+    connection_server: str
+    connection_database: str
 
-        self._connection_string: str = self._get_connection_string()
-
-        self.database_connection: pyodbc.Connection = self._create_database_connection()
-    
-    def _get_connection_string(self):
-        # TODO: add logging
-        connection_string: str = f'DRIVER={self._connection_driver};SERVER={self._connection_server};DATABASE={self._connection_database};Trusted_Connection=yes;'
-        print(connection_string)
+    def get_connection_string(self):
+        connection_string: str = f'DRIVER={self.connection_driver};SERVER={self.connection_server};DATABASE={self.connection_database};Trusted_Connection=yes;'
 
         return(connection_string)
+
+class ApplicationDbContext:
+    def __init__(self, connection_details: ConnectionDetails) -> None:
+        # TODO: add validations
+
+        # TODO: add logging
+        self._connection_string: str = connection_details.get_connection_string()
+
+        self.database_connection: pyodbc.Connection = self._create_database_connection()
     
     def _create_database_connection(self) -> pyodbc.Connection:
         # TODO: add logging
