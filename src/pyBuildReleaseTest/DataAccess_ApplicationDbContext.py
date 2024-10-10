@@ -32,3 +32,4 @@ class ApplicationDbContext:
     def close_database_connection(self) -> None:
         # TODO: add logging
         self.database_connection.close()
+        self.connection_engine.dispose()
