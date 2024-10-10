@@ -1,14 +1,14 @@
-import pyodbc
+from sqlalchemy import create_engine, Engine, Connection
 from dataclasses import dataclass
 
 @dataclass(frozen = True)
 class ConnectionDetails:
-    driver: str
     server: str
     database: str
+    driver: str
 
-    def get_connection_string(self):
-        connection_string: str = f'DRIVER={self.driver};SERVER={self.server};DATABASE={self.database};Trusted_Connection=yes;'
+    def get_connection_string(self) -> str:
+        connection_string: str = f"mssql+pyodbc://{self.server}/{self.database}?trusted_connection=yes&driver={self.driver}"
         return(connection_string)
 
 class ApplicationDbContext:
@@ -16,14 +16,17 @@ class ApplicationDbContext:
         # TODO: add validations
         # TODO: add logging
         self._connection_string: str = connection_details.get_connection_string()
-        self.database_connection: pyodbc.Connection = self._create_database_connection()
+        self.connection_engine: Engine = self._create_connection_engine()
+        self.database_connection: Connection = self._create_database_connection()
     
-    def _create_database_connection(self) -> pyodbc.Connection:
+    def _create_connection_engine(self) -> Engine:
+        connection_engine: Engine = create_engine(self._connection_string)
+        return(connection_engine)
+
+    def _create_database_connection(self) -> Connection:
         # TODO: add logging
         # TODO: add error handling
-        # TODO: refactor using SQLAlchemy ORM
-        # https://docs.sqlalchemy.org/en/20/orm/quickstart.html#simple-select
-        database_connection: pyodbc.Connection = pyodbc.connect(self._connection_string)
+        database_connection: Connection = self.connection_engine.connect()
         return(database_connection)
 
     def close_database_connection(self) -> None:
