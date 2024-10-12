@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, Engine, Connection
 from dataclasses import dataclass
+from sqlalchemy import create_engine, Engine, Connection
 
 @dataclass(frozen = True)
 class ConnectionDetails:
