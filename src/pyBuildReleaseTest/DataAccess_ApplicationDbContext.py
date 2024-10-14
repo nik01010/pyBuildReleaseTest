@@ -32,7 +32,7 @@ class ApplicationDbContext:
         return database_connection
     
     def _create_session(self) -> Session:
-        session = Session(bind = self.connection_engine)
+        session: Session = Session(bind = self.connection_engine)
         return session
 
     def disconnect(self) -> None:
