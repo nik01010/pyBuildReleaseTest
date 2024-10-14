@@ -41,7 +41,7 @@ def main():
 
     logger.info("Extracting Data")
 
-    people_count = person_service.get_people_count()
+    people_count: int = person_service.get_people_count()
 
     people: DataFrame = person_service.get_people()
 
