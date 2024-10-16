@@ -5,7 +5,7 @@ from datetime import datetime
 class TestDataModelPerson(unittest.TestCase):
     def test_create_new_person_should_return_correct_class(self):
         # Arrange / Act
-        expected_id = 123
+        expected_id: int = 123
         test_person: Person = Person(
             BusinessEntityID = expected_id,
             PersonType = "AB",
@@ -24,7 +24,7 @@ class TestDataModelPerson(unittest.TestCase):
 
         # Assert
         self.assertIsInstance(test_person, Person)
-        self.assertEqual(test_person.BusinessEntityID, expected_id)
+        self.assertEqual(expected_id, test_person.BusinessEntityID)
 
 if __name__ == '__main__':
     unittest.main()
