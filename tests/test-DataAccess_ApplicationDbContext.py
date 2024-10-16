@@ -2,7 +2,7 @@ import unittest
 import sqlite3
 from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 
-class TestDataModelPerson(unittest.TestCase):
+class TestDataAccessApplicationDbContext(unittest.TestCase):
     def setUp(self):
         self.test_sql_database: sqlite3.Connection = sqlite3.connect(":memory:")
         # cursor = self.test_sql_database.cursor()
