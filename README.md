@@ -10,18 +10,13 @@ Python port of [rBuildReleaseTest](https://github.com/nik01010/rBuildReleaseTest
 ### Local Install
 - pip install .\dist\pybuildreleasetest-0.1.0.tar.gz
 
-## Sample Data
-- This project uses the [AdventureWorks2022.bak](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms#download-backup-files) sample dataset from Microsoft
-- Use [these instructions](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms#restore-to-sql-server) to load the sample dataset into SQL Server Management Studio (SSMS)
-
-## Example Usage
+## Usage
 ```python
 from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from pyBuildReleaseTest.Helpers_Logger import initialise_logger
 from pyBuildReleaseTest.DataAccess_PersonService import PersonService
 from pandas import DataFrame
 
-# Configuration
 logger = initialise_logger()
 
 connection_details: ConnectionDetails = ConnectionDetails(
@@ -58,3 +53,7 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+## Sample Data
+- This project uses the [AdventureWorks2022.bak](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms#download-backup-files) sample dataset from Microsoft
+- Use [these instructions](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure?view=sql-server-ver16&tabs=ssms#restore-to-sql-server) to load the sample dataset into SQL Server Management Studio (SSMS)
