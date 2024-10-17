@@ -24,12 +24,13 @@ connection_details: ConnectionDetails = ConnectionDetails(
     database = "AdventureWorks2022",
     driver = "ODBC+Driver+17+for+SQL+Server"
 )
+connection_string = connection_details.get_connection_string()
 
 def main():
     logger.info("Starting ETL Process")
 
     logger.info("Connecting to Database")
-    database_context: ApplicationDbContext = ApplicationDbContext(connection_details = connection_details)
+    database_context: ApplicationDbContext = ApplicationDbContext(connection_string = connection_string)
 
     logger.debug("Setting up Data Services")
     person_service: PersonService = PersonService(database_context = database_context)
@@ -45,7 +46,7 @@ def main():
     person_bob: DataFrame = person_service.get_people_by_name(first_name = "Bob")
     person_chapman: DataFrame = person_service.get_people_by_name(last_name = "Chapman")
     person_bob_chapman: DataFrame = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
-
+    
     database_context.disconnect()
 
     logger.info("ETL Process completed")

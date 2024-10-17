@@ -6,7 +6,6 @@ from pyBuildReleaseTest.DataModel_Person import Person
 class TestDataAccessPersonService(unittest.TestCase):
     in_memory_database_connection_string: str = "sqlite+pysqlite:///:memory:/"
 
-
     def setUp(self):
         self.test_connection_string: str = self.in_memory_database_connection_string
         self.test_database_context: ApplicationDbContext = ApplicationDbContext(connection_string = self.in_memory_database_connection_string)
