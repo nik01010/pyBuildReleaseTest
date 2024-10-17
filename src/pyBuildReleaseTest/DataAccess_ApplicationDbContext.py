@@ -13,17 +13,17 @@ class ConnectionDetails:
         return connection_string
 
 class ApplicationDbContext:
-    def __init__(self, connection_details: ConnectionDetails) -> None:
+    def __init__(self, connection_string: str) -> None:
         # TODO: add validations
         # TODO: add logging and error handling
-        self._connection_string: str = connection_details.get_connection_string()
+        self.connection_string: str = connection_string
         self.connection_engine: Engine = self._create_connection_engine()
         self.database_connection: Connection = self._create_database_connection()
         self.session: Session = self._create_session()
 
     def _create_connection_engine(self) -> Engine:
         # TODO: add logging and error handling
-        connection_engine: Engine = create_engine(self._connection_string)
+        connection_engine: Engine = create_engine(self.connection_string)
         return connection_engine
 
     def _create_database_connection(self) -> Connection:
