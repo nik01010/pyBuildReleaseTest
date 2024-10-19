@@ -38,15 +38,15 @@ class TestDataAccessPersonService(unittest.TestCase):
         test_person_service: PersonService = PersonService(database_context = self._context)
         test_people: List[Person] = [
             Person(
-                BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+                PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
                 EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
             ),
             Person(
-                BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+                PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
                 EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
             ),
             Person(
-                BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
+                PersonType = "BC", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
                 EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
             )
         ]
@@ -63,11 +63,11 @@ class TestDataAccessPersonService(unittest.TestCase):
                 # Arrange
         test_person_service: PersonService = PersonService(database_context = self._context)
         test_person_bob: Person = Person(
-            BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+            PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
             EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
         )
         test_person_alice: Person = Person(
-            BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+            PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
             EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
         )
         test_people: List[Person] = [test_person_bob, test_person_alice]
