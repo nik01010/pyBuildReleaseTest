@@ -60,7 +60,7 @@ class TestDataAccessPersonService(unittest.TestCase):
         self.assertEqual(expected_count, result)
 
     def test_get_people_should_return_correct_records(self):
-                # Arrange
+        # Arrange
         test_person_service: PersonService = PersonService(database_context = self._context)
         test_person_bob: Person = Person(
             PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
@@ -71,7 +71,6 @@ class TestDataAccessPersonService(unittest.TestCase):
             EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
         )
         test_people: List[Person] = [test_person_bob, test_person_alice]
-        
         self._context.session.bulk_save_objects(test_people)
         expected_count: int = len(test_people)
 
@@ -85,6 +84,35 @@ class TestDataAccessPersonService(unittest.TestCase):
         self.assertEqual(expected_count, actual_count)
         self.assertEqual(test_person_bob.FirstName, actual_person_bob["FirstName"])
         self.assertEqual(test_person_bob.ModifiedDate, actual_person_bob["ModifiedDate"])
+
+    def test_get_person_by_id_should_return_correct_person(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        expected_id: int = 1
+        another_id: int = 2
+        test_person_bob: Person = Person(
+            BusinessEntityID = another_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+            EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+        )
+        test_person_alice: Person = Person(
+            BusinessEntityID = expected_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+            EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+        )
+        test_people: List[Person] = [test_person_bob, test_person_alice]
+        self._context.session.bulk_save_objects(test_people)
+        expected_count: int = 1
+
+        # Act
+        result: DataFrame = test_person_service.get_person_by_id(id = expected_id)
+
+        # Assert
+        self.assertIsInstance(result, DataFrame)
+        actual_count: int = len(result)
+        self.assertEqual(expected_count, actual_count)
+        self.assertIn(expected_id, result["BusinessEntityID"].values)
+        actual_person_alice: Series = result[result["BusinessEntityID"] == expected_id].squeeze()
+        self.assertEqual(test_person_alice.BusinessEntityID, actual_person_alice["BusinessEntityID"])
+        self.assertEqual(test_person_alice.FirstName, actual_person_alice["FirstName"])
 
 if __name__ == '__main__':
     unittest.main()
