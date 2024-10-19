@@ -2,7 +2,7 @@ import unittest
 from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext
 from pyBuildReleaseTest.DataAccess_PersonService import PersonService
 from pyBuildReleaseTest.DataModel_Person import Person
-from sqlalchemy import text
+from sqlalchemy import text, TextClause
 from typing import List
 from datetime import datetime
 from pandas import DataFrame, Series
@@ -15,8 +15,8 @@ class TestDataAccessPersonService(unittest.TestCase):
         self.test_database_context: ApplicationDbContext = ApplicationDbContext(connection_string = self.in_memory_database_connection_string)
 
         # Create Person database
-        create_person_database_statement = text("ATTACH DATABASE \':memory:\' AS Person;")
-        delete_person_table_statement = text("DROP TABLE IF EXISTS Person")
+        create_person_database_statement: TextClause = text("ATTACH DATABASE \':memory:\' AS Person;")
+        delete_person_table_statement: TextClause = text("DROP TABLE IF EXISTS Person")
         with self.test_database_context.connection_engine.connect() as connection:
             connection.execute(create_person_database_statement)
             connection.execute(delete_person_table_statement)
@@ -37,7 +37,7 @@ class TestDataAccessPersonService(unittest.TestCase):
     def test_get_people_count_should_return_correct_count(self):
         # Arrange
         test_person_service: PersonService = PersonService(database_context = self.test_database_context)
-        test_people = [
+        test_people: List[Person] = [
             Person(
                 BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
                 EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
@@ -55,7 +55,7 @@ class TestDataAccessPersonService(unittest.TestCase):
         expected_count: int = len(test_people)
 
         # Act
-        result = test_person_service.get_people_count()
+        result: int = test_person_service.get_people_count()
 
         # Assert
         self.assertEqual(expected_count, result)
