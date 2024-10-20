@@ -1,5 +1,5 @@
-from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext
-from pyBuildReleaseTest.DataModel_Person import Person
+from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
+from pyBuildReleaseTest.DataModel.Person import Person
 from sqlalchemy import select
 from pandas import DataFrame, read_sql_query
 from typing import Optional

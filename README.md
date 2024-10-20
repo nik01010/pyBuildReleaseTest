@@ -12,9 +12,9 @@ Python port of [rBuildReleaseTest](https://github.com/nik01010/rBuildReleaseTest
 
 ## Usage
 ```python
-from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext, ConnectionDetails
-from pyBuildReleaseTest.Helpers_Logger import initialise_logger
-from pyBuildReleaseTest.DataAccess_PersonService import PersonService
+from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
+from pyBuildReleaseTest.Helpers.Logger import initialise_logger
+from pyBuildReleaseTest.DataAccess.PersonService import PersonService
 from pandas import DataFrame
 
 logger = initialise_logger()

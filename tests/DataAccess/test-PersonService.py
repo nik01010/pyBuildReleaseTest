@@ -1,7 +1,7 @@
 import unittest
-from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext
-from pyBuildReleaseTest.DataAccess_PersonService import PersonService
-from pyBuildReleaseTest.DataModel_Person import Person
+from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
+from pyBuildReleaseTest.DataAccess.PersonService import PersonService
+from pyBuildReleaseTest.DataModel.Person import Person
 from sqlalchemy import text, TextClause
 from typing import List
 from datetime import datetime

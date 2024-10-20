@@ -1,5 +1,5 @@
 import unittest
-from pyBuildReleaseTest.DataModel_Person import Person
+from pyBuildReleaseTest.DataModel.Person import Person
 from datetime import datetime
 
 class TestDataModelPerson(unittest.TestCase):

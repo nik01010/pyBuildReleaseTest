@@ -1,5 +1,5 @@
 import unittest
-from pyBuildReleaseTest.DataAccess_ApplicationDbContext import ApplicationDbContext, ConnectionDetails
+from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from sqlalchemy import Engine, Connection
 
 class TestDataAccessApplicationDbContext(unittest.TestCase):
