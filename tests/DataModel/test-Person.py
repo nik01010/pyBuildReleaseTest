@@ -2,7 +2,7 @@ import unittest
 from pyBuildReleaseTest.DataModel.Person import Person
 from datetime import datetime
 
-class TestDataModelPerson(unittest.TestCase):
+class TestPerson(unittest.TestCase):
     def test_create_new_person_should_return_correct_class(self):
         # Arrange / Act
         expected_id: int = 123
