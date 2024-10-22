@@ -15,16 +15,19 @@ Python port of [rBuildReleaseTest](https://github.com/nik01010/rBuildReleaseTest
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from pyBuildReleaseTest.Helpers.Logger import initialise_logger
 from pyBuildReleaseTest.DataAccess.PersonService import PersonService
+from pyBuildReleaseTest.DataModel.Person import Person
+from logging import Logger
 from pandas import DataFrame
 
-logger = initialise_logger()
+logger: Logger = initialise_logger()
 
+# TODO: pass connection parameters from config (DEV/UAT/PROD)
 connection_details: ConnectionDetails = ConnectionDetails(
     server = "localhost",
     database = "AdventureWorks2022",
     driver = "ODBC+Driver+17+for+SQL+Server"
 )
-connection_string = connection_details.get_connection_string()
+connection_string: str = connection_details.get_connection_string()
 
 def main():
     logger.info("Starting ETL Process")
@@ -46,7 +49,13 @@ def main():
     person_bob: DataFrame = person_service.get_people_by_name(first_name = "Bob")
     person_chapman: DataFrame = person_service.get_people_by_name(last_name = "Chapman")
     person_bob_chapman: DataFrame = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
-    
+
+    new_person: Person = Person(
+        PersonType = "EM", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry", EmailPromotion = 1
+    )
+    new_person_id: int = person_service.create_person(new_person = new_person)
+    logger.debug(f"Created new Person with BusinessEntityID: {new_person_id}")
+
     database_context.disconnect()
 
     logger.info("ETL Process completed")

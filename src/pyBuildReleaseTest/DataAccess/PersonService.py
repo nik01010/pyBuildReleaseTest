@@ -1,4 +1,5 @@
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
+from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from pyBuildReleaseTest.DataModel.Person import Person
 from sqlalchemy import select
 from pandas import DataFrame, read_sql_query
@@ -38,3 +39,18 @@ class PersonService:
 
         people: DataFrame = read_sql_query(sql = query, con = self._context.database_connection)
         return people
+
+    def create_person(self, new_person: Person) -> int:
+        # TODO: add validation using SchemaValidator
+
+        new_business_entity = BusinessEntity()
+        self._context.session.add(new_business_entity)
+        self._context.session.commit()
+        
+        new_business_entity_id = new_business_entity.BusinessEntityID
+        new_person.BusinessEntityID = new_business_entity_id
+
+        self._context.session.add(new_person)
+        self._context.session.commit()
+
+        return new_business_entity_id

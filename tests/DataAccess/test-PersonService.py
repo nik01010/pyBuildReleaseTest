@@ -39,15 +39,15 @@ class TestPersonService(unittest.TestCase):
         test_people: List[Person] = [
             Person(
                 PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
-                EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-                EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
-                EmailPromotion = 1, rowguid = "cde", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             )
         ]
         self._context.session.bulk_save_objects(test_people)
@@ -66,11 +66,11 @@ class TestPersonService(unittest.TestCase):
         another_id: int = 2
         test_person_bob: Person = Person(
             BusinessEntityID = expected_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
-            EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+            EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_person_alice: Person = Person(
             BusinessEntityID = another_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-            EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+            EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_people: List[Person] = [test_person_bob, test_person_alice]
         self._context.session.bulk_save_objects(test_people)
@@ -95,11 +95,11 @@ class TestPersonService(unittest.TestCase):
         another_id: int = 2
         test_person_bob: Person = Person(
             BusinessEntityID = another_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
-            EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+            EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_person_alice: Person = Person(
             BusinessEntityID = expected_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-            EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+            EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_people: List[Person] = [test_person_bob, test_person_alice]
         self._context.session.bulk_save_objects(test_people)
@@ -124,19 +124,19 @@ class TestPersonService(unittest.TestCase):
         test_people: List[Person] = [
             Person(
                 PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = expected_first_name, LastName = "Chapman",
-                EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-                EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
-                EmailPromotion = 1, rowguid = "cde", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "CD", NameStyle = 0, Title = "Mr", FirstName = expected_first_name, LastName = "Carson",
-                EmailPromotion = 1, rowguid = "def", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             )
         ]
         self._context.session.bulk_save_objects(test_people)
@@ -160,15 +160,15 @@ class TestPersonService(unittest.TestCase):
         test_people: List[Person] = [
             Person(
                 PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = expected_last_name,
-                EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-                EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "CD", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
-                EmailPromotion = 1, rowguid = "cde", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             )
         ]
         self._context.session.bulk_save_objects(test_people)
@@ -193,19 +193,19 @@ class TestPersonService(unittest.TestCase):
         test_people: List[Person] = [
             Person(
                 PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = expected_first_name, LastName = "Chapman",
-                EmailPromotion = 1, rowguid = "abc", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
-                EmailPromotion = 1, rowguid = "bcd", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "CD", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry",
-                EmailPromotion = 1, rowguid = "cde", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             ),
             Person(
                 PersonType = "DE", NameStyle = 0, Title = "Mr", FirstName = expected_first_name, LastName = expected_last_name,
-                EmailPromotion = 1, rowguid = "def", ModifiedDate = datetime.now()
+                EmailPromotion = 1, ModifiedDate = datetime.now()
             )
         ]
         self._context.session.bulk_save_objects(test_people)
