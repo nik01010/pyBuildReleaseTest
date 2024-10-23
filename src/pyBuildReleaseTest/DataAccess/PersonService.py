@@ -42,7 +42,6 @@ class PersonService:
 
     def create_person(self, new_person: Person) -> int:
         # TODO: add validation using SchemaValidator
-
         new_business_entity = BusinessEntity()
         self._context.session.add(new_business_entity)
         self._context.session.commit()

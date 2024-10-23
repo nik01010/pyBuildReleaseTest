@@ -2,6 +2,7 @@ import unittest
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
 from pyBuildReleaseTest.DataAccess.PersonService import PersonService
 from pyBuildReleaseTest.DataModel.Person import Person
+from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from sqlalchemy import text, TextClause
 from typing import List
 from datetime import datetime
@@ -15,12 +16,17 @@ class TestPersonService(unittest.TestCase):
 
         # Create Person database
         create_person_database_statement: TextClause = text("ATTACH DATABASE \':memory:\' AS Person;")
+
+        # Delete BusinessEntity and Person tables
         delete_person_table_statement: TextClause = text("DROP TABLE IF EXISTS Person")
+        delete_business_entity_table_statement: TextClause = text("DROP TABLE IF EXISTS BusinessEntity")
         with self._context.connection_engine.connect() as connection:
             connection.execute(create_person_database_statement)
             connection.execute(delete_person_table_statement)
+            connection.execute(delete_business_entity_table_statement)
 
-        # Create Person table
+        # Re-create BusinessEntity and Person tables
+        BusinessEntity.metadata.create_all(self._context.connection_engine)
         Person.metadata.create_all(self._context.connection_engine)
 
     def tearDown(self):
@@ -226,6 +232,47 @@ class TestPersonService(unittest.TestCase):
         self.assertEqual(expected_first_name, actual_unique_first_names)
         actual_unique_last_names: List[str] = result["LastName"].unique()
         self.assertEqual(expected_last_name, actual_unique_last_names)
+
+    def test_create_person_should_create_record(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        test_existing_business_entities: List[BusinessEntity] = [
+            BusinessEntity(BusinessEntityID = 1, ModifiedDate = datetime.now()),
+            BusinessEntity(BusinessEntityID = 2, ModifiedDate = datetime.now())
+        ]
+        test_existing_people: List[Person] = [
+            Person(
+                BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            ),
+            Person(
+                BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            )
+        ]
+        test_new_person: Person = Person(
+            PersonType = "CD", NameStyle = 0, Title = "Mr", FirstName = "Tom", 
+            LastName = "Jerry", EmailPromotion = 1, ModifiedDate = datetime.now()
+        )
+        self._context.session.bulk_save_objects(test_existing_business_entities)
+        self._context.session.bulk_save_objects(test_existing_people)
+        expected_count: int = (len(test_existing_people) + 1)
+        expected_new_id: int = (len(test_existing_people) + 1)
+
+        # Act
+        result: int = test_person_service.create_person(new_person = test_new_person)
+        
+        # Assert
+        self.assertIsInstance(result, int)
+        self.assertEqual(expected_new_id, result)
+        actual_new_person: DataFrame = test_person_service.get_person_by_id(id = result).squeeze()
+        self.assertEqual(test_new_person.BusinessEntityID, actual_new_person["BusinessEntityID"])
+        self.assertEqual(test_new_person.FirstName, actual_new_person["FirstName"])
+        self.assertEqual(test_new_person.LastName, actual_new_person["LastName"])
+        self.assertEqual(test_new_person.ModifiedDate, actual_new_person["ModifiedDate"])
+        actual_people: DataFrame = test_person_service.get_people()
+        actual_count: int = len(actual_people)
+        self.assertEqual(expected_count, actual_count)
 
 if __name__ == '__main__':
     unittest.main()
