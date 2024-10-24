@@ -23,6 +23,15 @@ class PersonService:
     def get_person_by_id(self, id: int) -> DataFrame:
         query = select(Person).where(Person.BusinessEntityID == id)
         person: DataFrame = read_sql_query(sql = query, con = self._context.database_connection)
+
+        # TODO: add unit tests for these two branches
+        # TODO: is there a more specific Exception to use here
+        number_of_records = len(person)
+        if (number_of_records == 0):
+            raise Exception(f"No records found for BusinessEntityID {id}")
+        if (number_of_records > 1):
+            raise Exception(f"Expected single record for BusinessEntityID {id} but found {number_of_records}")
+
         return person
     
     def get_people_by_name(self, first_name: Optional[str] = None, last_name: Optional[str] = None) -> DataFrame:
@@ -30,9 +39,9 @@ class PersonService:
         if no_names_provided:
             raise Exception("Either first_name or last_name must be provided")
         
-        if last_name is None:
+        if (last_name is None):
             query = select(Person).where(Person.FirstName == first_name)
-        elif first_name is None:
+        elif (first_name is None):
             query = select(Person).where(Person.LastName == last_name)
         else:
             query = select(Person).where((Person.FirstName == first_name) & (Person.LastName == last_name))
