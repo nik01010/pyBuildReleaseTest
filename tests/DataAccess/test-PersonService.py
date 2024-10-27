@@ -69,13 +69,12 @@ class TestPersonService(unittest.TestCase):
         # Arrange
         test_person_service: PersonService = PersonService(database_context = self._context)
         expected_id: int = 1
-        another_id: int = 2
         test_person_bob: Person = Person(
             BusinessEntityID = expected_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
             EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_person_alice: Person = Person(
-            BusinessEntityID = another_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+            BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
             EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_people: List[Person] = [test_person_bob, test_person_alice]
@@ -94,13 +93,56 @@ class TestPersonService(unittest.TestCase):
         self.assertEqual(test_person_bob.FirstName, actual_person_bob["FirstName"])
         self.assertEqual(test_person_bob.ModifiedDate, actual_person_bob["ModifiedDate"])
 
+    def test_person_exists_should_return_true_if_record_exists(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        expected_id: int = 2
+        test_people: List[Person] = [
+            Person(
+                BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            ),
+            Person(
+                BusinessEntityID = expected_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            )
+        ]
+        self._context.session.bulk_save_objects(test_people)
+        
+        # Act
+        result = test_person_service.person_exists(id = expected_id)
+
+        # Assert
+        self.assertTrue(result)
+
+    def test_person_exists_should_return_false_if_record_does_not_exist(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        invalid_id: int = 3
+        test_people: List[Person] = [
+            Person(
+                BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            ),
+            Person(
+                BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+                EmailPromotion = 1, ModifiedDate = datetime.now()
+            )
+        ]
+        self._context.session.bulk_save_objects(test_people)
+        
+        # Act
+        result = test_person_service.person_exists(id = invalid_id)
+
+        # Assert
+        self.assertFalse(result)
+
     def test_get_person_by_id_should_return_correct_person(self):
         # Arrange
         test_person_service: PersonService = PersonService(database_context = self._context)
-        expected_id: int = 1
-        another_id: int = 2
+        expected_id: int = 2
         test_person_bob: Person = Person(
-            BusinessEntityID = another_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+            BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
             EmailPromotion = 1, ModifiedDate = datetime.now()
         )
         test_person_alice: Person = Person(
@@ -273,6 +315,34 @@ class TestPersonService(unittest.TestCase):
         actual_people: DataFrame = test_person_service.get_people()
         actual_count: int = len(actual_people)
         self.assertEqual(expected_count, actual_count)
+
+    def test_delete_person_should_delete_record(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        expected_id: int = 2
+        test_person_bob: Person = Person(
+            BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+            EmailPromotion = 1, ModifiedDate = datetime.now()
+        )
+        test_person_alice: Person = Person(
+            BusinessEntityID = expected_id, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+            EmailPromotion = 1, ModifiedDate = datetime.now()
+        )
+        test_existing_people: List[Person] = [test_person_bob, test_person_alice]
+        self._context.session.bulk_save_objects(test_existing_people)
+        expected_rows_to_delete: int = 1
+        expected_count: int = (len(test_existing_people) - expected_rows_to_delete)
+
+        # Act
+        result: int = test_person_service.delete_person(id = expected_id)
+
+        # Assert
+        self.assertEqual(expected_rows_to_delete, result)
+        actual_new_people: DataFrame = test_person_service.get_people()
+        actual_count: int = len(actual_new_people)
+        self.assertEqual(expected_count, actual_count)
+        expected_id_exists: int = test_person_service.person_exists(id = expected_id)
+        self.assertFalse(expected_id_exists)
 
 if __name__ == '__main__':
     unittest.main()
