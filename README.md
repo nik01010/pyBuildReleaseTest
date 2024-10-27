@@ -55,6 +55,9 @@ def main():
     )
     new_person_id: int = person_service.create_person(new_person = new_person)
     logger.debug(f"Created new Person with BusinessEntityID: {new_person_id}")
+    
+    deleted_records: int = person_service.delete_person(id = new_person_id)
+    logger.debug(f"Deleted {deleted_records} records for Person with BusinessEntityID: {new_person_id}")
 
     database_context.disconnect()
 
