@@ -21,7 +21,6 @@ from pandas import DataFrame
 
 logger: Logger = initialise_logger()
 
-# TODO: pass connection parameters from config (DEV/UAT/PROD)
 connection_details: ConnectionDetails = ConnectionDetails(
     server = "localhost",
     database = "AdventureWorks2022",
