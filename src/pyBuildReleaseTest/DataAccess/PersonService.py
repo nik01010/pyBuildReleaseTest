@@ -1,7 +1,7 @@
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
 from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from pyBuildReleaseTest.DataModel.Person import Person
-from sqlalchemy import select, update, delete, CursorResult, Delete
+from sqlalchemy import select, update, delete, ScalarResult, CursorResult, Delete
 from pandas import DataFrame, read_sql_query
 from typing import Optional, Any
 
@@ -20,27 +20,18 @@ class PersonService:
         people: DataFrame = read_sql_query(sql = query, con = self._context.database_connection)
         return people
 
-    def person_exists(self, id: int) -> bool:
-        person_count: int = self._context.session.query(Person).where(Person.BusinessEntityID == id).count()
-
-        # TODO: add unit test for multiple records scenario
-        if person_count > 1:
-            raise Exception(f"Expected single record for BusinessEntityID {id} but found {person_count}")
-        elif person_count == 1:
-            return True
-        else:
-            return False
-
     def check_person_exists(self, id: int) -> None:
-        person_exists: bool = self.person_exists(id = id)
-        if not person_exists:
+        person_count: int = self._context.session.query(Person).where(Person.BusinessEntityID == id).count()
+        if person_count == 0:
             raise Exception(f"No records found for Person with BusinessEntityID {id}")
 
-    def get_person_by_id(self, id: int) -> DataFrame:
-        self.check_person_exists(id = id)
-        
+    def get_person(self, id: int) -> Person:        
         query = select(Person).where(Person.BusinessEntityID == id)
-        person: DataFrame = read_sql_query(sql = query, con = self._context.database_connection)
+        person: Person | None = self._context.session.scalars(query).first()
+
+        if person is None:
+            raise Exception(f"No records found for Person with BusinessEntityID {id}")
+        
         return person
     
     def get_people_by_name(self, first_name: Optional[str] = None, last_name: Optional[str] = None) -> DataFrame:
@@ -77,7 +68,14 @@ class PersonService:
     #     # TODO: add validation using SchemaValidator
     #     self.check_person_exists(id = id)
 
-        # query = update(Person).where(Person.BusinessEntityID == id).values(new_person)
+    #     old_person: Person = self._context.session.get()
+
+    #     old_person.Title = new_person.Title
+    #     old_person.FirstName = new_person.FirstName
+    #     old_person.MiddleName = new_person.MiddleName
+    #     old_person.Suffix = new_person.Suffix
+
+    #     self._context.session.commit()
 
     def delete_person(self, id: int) -> int:
         self.check_person_exists(id = id)
@@ -94,5 +92,4 @@ class PersonService:
         self._context.session.commit()
 
         rows_affected: int = max(people_deleted, business_entities_deleted)
-
         return rows_affected

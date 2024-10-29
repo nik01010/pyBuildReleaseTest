@@ -44,11 +44,11 @@ def main():
 
     people: DataFrame = person_service.get_people()
 
-    person_by_id: DataFrame = person_service.get_person_by_id(id = 16003)
+    person_by_id: Person = person_service.get_person(id = 16003)
 
-    person_bob: DataFrame = person_service.get_people_by_name(first_name = "Bob")
-    person_chapman: DataFrame = person_service.get_people_by_name(last_name = "Chapman")
-    person_bob_chapman: DataFrame = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
+    person_bob: Person = person_service.get_people_by_name(first_name = "Bob")
+    person_chapman: Person = person_service.get_people_by_name(last_name = "Chapman")
+    person_bob_chapman: Person = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
 
     new_person: Person = Person(
         PersonType = "EM", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry", EmailPromotion = 1
