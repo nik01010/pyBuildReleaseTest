@@ -50,7 +50,6 @@ class PersonService:
         return people
 
     def create_person(self, new_person: Person) -> int:
-        # TODO: add validation using SchemaValidator
         new_business_entity = BusinessEntity()
         self._context.session.add(new_business_entity)
         self._context.session.commit()
@@ -63,19 +62,18 @@ class PersonService:
 
         return new_business_entity_id
 
-    # def edit_person(self, id: int, new_person: Person) -> int:
-    #     # TODO: add logging
-    #     # TODO: add validation using SchemaValidator
-    #     self.check_person_exists(id = id)
+    def edit_person(self, id: int, edited_person: Person) -> None:
+        self.check_person_exists(id = id)
 
-    #     old_person: Person = self._context.session.get()
+        # TODO: use Mapper for this
+        old_person: Person = self.get_person(id = id)
+        old_person.Title = edited_person.Title
+        old_person.FirstName = edited_person.FirstName
+        old_person.MiddleName = edited_person.MiddleName
+        old_person.Suffix = edited_person.Suffix
+        old_person.ModifiedDate = edited_person.ModifiedDate
 
-    #     old_person.Title = new_person.Title
-    #     old_person.FirstName = new_person.FirstName
-    #     old_person.MiddleName = new_person.MiddleName
-    #     old_person.Suffix = new_person.Suffix
-
-    #     self._context.session.commit()
+        self._context.session.commit()
 
     def delete_person(self, id: int) -> int:
         self.check_person_exists(id = id)

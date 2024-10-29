@@ -294,6 +294,37 @@ class TestPersonService(unittest.TestCase):
         actual_count: int = len(actual_people)
         self.assertEqual(expected_count, actual_count)
 
+    def test_edit_person_should_edit_record(self):
+        # Arrange
+        test_person_service: PersonService = PersonService(database_context = self._context)
+        expected_id: int = 1
+        test_person_bob: Person = Person(
+            BusinessEntityID = expected_id, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Bob", LastName = "Chapman",
+            EmailPromotion = 1, ModifiedDate = datetime(2024, 10, 1, 9, 0)
+        )
+        test_person_alice: Person = Person(
+            BusinessEntityID = 2, PersonType = "BC", NameStyle = 0, Title = "Ms", FirstName = "Alice", LastName = "Cooper",
+            EmailPromotion = 1, ModifiedDate = datetime(2024, 10, 1, 9, 0)
+        )
+        test_existing_people: List[Person] = [test_person_bob, test_person_alice]
+        self._context.session.bulk_save_objects(test_existing_people)
+        test_edited_person_bob: Person = Person(
+            BusinessEntityID = 1, PersonType = "AB", NameStyle = 0, Title = "Mr", FirstName = "Robert", 
+            MiddleName = "Anderson", LastName = "Chapman", EmailPromotion = 1, ModifiedDate = datetime(2024, 12, 1, 12, 0)
+        )
+
+        # Act
+        result: None = test_person_service.edit_person(id = expected_id, edited_person = test_edited_person_bob)
+
+        # Assert
+        self.assertIsNone(result)
+        actual_new_person = test_person_service.get_person(id = expected_id)
+        self.assertEqual(test_edited_person_bob.BusinessEntityID, actual_new_person.BusinessEntityID)
+        self.assertEqual(test_edited_person_bob.FirstName, actual_new_person.FirstName)
+        self.assertEqual(test_edited_person_bob.MiddleName, actual_new_person.MiddleName)
+        self.assertEqual(test_edited_person_bob.LastName, actual_new_person.LastName)
+        self.assertEqual(test_edited_person_bob.ModifiedDate, actual_new_person.ModifiedDate)
+
     def test_delete_person_should_delete_record(self):
         # Arrange
         test_person_service: PersonService = PersonService(database_context = self._context)
