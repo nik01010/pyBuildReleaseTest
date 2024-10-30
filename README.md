@@ -12,8 +12,8 @@ Python port of [rBuildReleaseTest](https://github.com/nik01010/rBuildReleaseTest
 
 ## Usage
 ```python
-from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from pyBuildReleaseTest.Helpers.Logger import initialise_logger
+from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from pyBuildReleaseTest.DataAccess.PersonService import PersonService
 from pyBuildReleaseTest.DataModel.Person import Person
 from logging import Logger
