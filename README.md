@@ -27,6 +27,7 @@ connection_details: ConnectionDetails = ConnectionDetails(
     driver = "ODBC+Driver+17+for+SQL+Server"
 )
 connection_string: str = connection_details.get_connection_string()
+logger.debug(f"Using connection string: {connection_string}")
 
 def main():
     logger.info("Starting ETL Process")
