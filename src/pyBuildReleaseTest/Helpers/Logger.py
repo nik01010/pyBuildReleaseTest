@@ -1,5 +1,5 @@
-from logging import getLogger, basicConfig, getLevelName, StreamHandler, FileHandler, Formatter, Logger, DEBUG
-from typing import Optional
+from logging import getLogger, basicConfig, getLevelName, StreamHandler, FileHandler, Handler, Logger, DEBUG
+from typing import Optional, List
 
 
 def initialise_logger(
@@ -10,22 +10,25 @@ def initialise_logger(
     ) -> Logger:
     logger: Logger = getLogger(__name__)
     
+    if file_path is None:
+        handlers: List[Handler] = [StreamHandler()]
+    else:
+        handlers: List[Handler] = [
+            FileHandler(filename = file_path),
+            StreamHandler()
+        ]
+
     basicConfig(
         format = message_format,
         datefmt = date_format,
         level = level,
-        handlers=[StreamHandler()]
+        handlers = handlers
     )
 
-    if file_path is not None:
-        file_handler = FileHandler(filename = file_path)
-        file_handler.setLevel(level = level)
-        file_handler.setFormatter(Formatter(message_format, date_format))
-        logger.addHandler(file_handler)
-
-        logger.debug(f"Logging to file path: {file_path}")
-    
     level_name: str = getLevelName(level)
     logger.debug(f"Logging configured using level: {level_name}")
+
+    if file_path is not None:
+        logger.debug(f"Logging to file path: {file_path}")
 
     return logger

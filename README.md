@@ -16,26 +16,24 @@ from pyBuildReleaseTest.Helpers.Logger import initialise_logger
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from pyBuildReleaseTest.DataAccess.PersonService import PersonService
 from pyBuildReleaseTest.DataModel.Person import Person
+from configparser import ConfigParser
 from logging import Logger
 from pandas import DataFrame
 
-logger: Logger = initialise_logger()
 
-connection_details: ConnectionDetails = ConnectionDetails(
-    server = "localhost",
-    database = "AdventureWorks2022",
-    driver = "ODBC+Driver+17+for+SQL+Server"
-)
-connection_string: str = connection_details.get_connection_string()
-logger.debug(f"Using connection string: {connection_string}")
-
-
-# Main process --------------------------------------------------------------------
 def main():
+    logger: Logger = initialise_logger()
     logger.info("Starting ETL Process")
 
     # Connect ---------------------------------------------------------------------
     logger.info("Connecting to Database")
+    connection_details: ConnectionDetails = ConnectionDetails(
+        server = "localhost",
+        database = "AdventureWorks2022",
+        driver = "ODBC+Driver+17+for+SQL+Server"
+    )
+    connection_string: str = connection_details.get_connection_string()
+
     database_context: ApplicationDbContext = ApplicationDbContext(connection_string = connection_string)
 
     person_service: PersonService = PersonService(database_context = database_context)
