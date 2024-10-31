@@ -1,7 +1,7 @@
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext
 from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from pyBuildReleaseTest.DataModel.Person import Person
-from sqlalchemy import select, update, delete, ScalarResult, CursorResult, Delete
+from sqlalchemy import select, delete, CursorResult, Delete
 from pandas import DataFrame, read_sql_query
 from typing import Optional, Any
 
