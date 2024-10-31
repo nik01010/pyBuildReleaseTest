@@ -25,6 +25,8 @@ class ApplicationDbContext:
         self.database_connection: Connection = self._create_database_connection()
         self.session: Session = self._create_session()
 
+        logger.debug("Created database connection")
+
     def _create_connection_engine(self) -> Engine:
         try:
             connection_engine: Engine = create_engine(self.connection_string)
@@ -55,5 +57,5 @@ class ApplicationDbContext:
             self.database_connection.close()
             self.connection_engine.dispose()
         except Exception as error:
-            logger.error(f"Error disconnecting with message: {repr(error)}")
+            logger.error(f"Error disconnecting from database with message: {repr(error)}")
             raise

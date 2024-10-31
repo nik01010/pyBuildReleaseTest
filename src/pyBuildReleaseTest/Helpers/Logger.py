@@ -1,4 +1,4 @@
-from logging import getLogger, basicConfig, StreamHandler, FileHandler, Formatter, Logger, DEBUG
+from logging import getLogger, basicConfig, getLevelName, StreamHandler, FileHandler, Formatter, Logger, DEBUG
 from typing import Optional
 
 
@@ -25,6 +25,7 @@ def initialise_logger(
 
         logger.debug(f"Logging to file path: {file_path}")
     
-    logger.debug(f"Logging configured using level: {level}")
+    level_name: str = getLevelName(level)
+    logger.debug(f"Logging configured using level: {level_name}")
 
     return logger
