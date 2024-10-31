@@ -1,21 +1,30 @@
-import logging
+from logging import getLogger, basicConfig, StreamHandler, FileHandler, Formatter, Logger, DEBUG
+from typing import Optional
+
 
 def initialise_logger(
-        log_file_path: str = "test_log.log",
-        log_level: int = logging.DEBUG,
-        log_message_format: str = "[%(asctime)s] [%(levelname)s] [%(filename)s] [%(funcName)s] [%(lineno)s] %(message)s",
-        log_date_format: str = "%Y-%m-%d %H:%M:%S"
-    ) -> logging.Logger:
-    logger: logging.Logger = logging.getLogger(__name__)
-
-    logging.basicConfig(
-        format = log_message_format,
-        datefmt = log_date_format,
-        level = log_level,
-        handlers=[
-            logging.FileHandler(log_file_path),
-            logging.StreamHandler()
-        ]
+        file_path: Optional[str] = "test_log.log",
+        level: int = DEBUG,
+        message_format: str = "[%(asctime)s] [%(levelname)s] [%(filename)s] [%(funcName)s] [%(lineno)s] %(message)s",
+        date_format: str = "%Y-%m-%d %H:%M:%S"
+    ) -> Logger:
+    logger: Logger = getLogger(__name__)
+    
+    basicConfig(
+        format = message_format,
+        datefmt = date_format,
+        level = level,
+        handlers=[StreamHandler()]
     )
+
+    if file_path is not None:
+        file_handler = FileHandler(filename = file_path)
+        file_handler.setLevel(level = level)
+        file_handler.setFormatter(Formatter(message_format, date_format))
+        logger.addHandler(file_handler)
+
+        logger.debug(f"Logging to file path: {file_path}")
+    
+    logger.debug(f"Logging configured using level: {level}")
 
     return logger

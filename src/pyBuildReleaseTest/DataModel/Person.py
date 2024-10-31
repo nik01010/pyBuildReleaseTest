@@ -3,6 +3,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from datetime import datetime
 
+
 # TODO: check if Person can inherit directly from DeclarativeBase without defining Base
 class Base(DeclarativeBase):
     pass

@@ -2,6 +2,7 @@ import unittest
 from pyBuildReleaseTest.DataModel.BusinessEntity import BusinessEntity
 from datetime import datetime
 
+
 class TestBusinessEntity(unittest.TestCase):
     def test_create_new_business_entity_should_return_correct_class(self):
         # Arrange / Act

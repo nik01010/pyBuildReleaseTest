@@ -2,6 +2,7 @@ from sqlalchemy import Integer, String, DateTime, func
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from datetime import datetime
 
+
 # TODO: check if Person can inherit directly from DeclarativeBase without defining Base
 class Base(DeclarativeBase):
     pass

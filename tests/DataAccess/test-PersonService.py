@@ -8,6 +8,7 @@ from typing import List
 from datetime import datetime
 from pandas import DataFrame, Series
 
+
 class TestPersonService(unittest.TestCase):
     in_memory_database_connection_string: str = "sqlite+pysqlite:///:memory:"
 

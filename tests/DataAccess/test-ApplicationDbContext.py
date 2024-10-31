@@ -2,6 +2,7 @@ import unittest
 from pyBuildReleaseTest.DataAccess.ApplicationDbContext import ApplicationDbContext, ConnectionDetails
 from sqlalchemy import Engine, Connection
 
+
 class TestApplicationDbContext(unittest.TestCase):
     in_memory_database_connection_string: str = "sqlite+pysqlite:///:memory:"
 

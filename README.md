@@ -29,6 +29,8 @@ connection_details: ConnectionDetails = ConnectionDetails(
 connection_string: str = connection_details.get_connection_string()
 logger.debug(f"Using connection string: {connection_string}")
 
+
+# Main process --------------------------------------------------------------------
 def main():
     logger.info("Starting ETL Process")
 
@@ -36,7 +38,6 @@ def main():
     logger.info("Connecting to Database")
     database_context: ApplicationDbContext = ApplicationDbContext(connection_string = connection_string)
 
-    logger.debug("Setting up Data Services")
     person_service: PersonService = PersonService(database_context = database_context)
 
 
@@ -48,17 +49,17 @@ def main():
 
     person_by_id: Person = person_service.get_person(id = 16003)
 
-    person_bob: Person = person_service.get_people_by_name(first_name = "Bob")
-    person_chapman: Person = person_service.get_people_by_name(last_name = "Chapman")
-    person_bob_chapman: Person = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
+    people_bob: DataFrame = person_service.get_people_by_name(first_name = "Bob")
+    people_chapman: DataFrame = person_service.get_people_by_name(last_name = "Chapman")
+    people_bob_chapman: DataFrame = person_service.get_people_by_name(first_name = "Bob", last_name = "Chapman")
 
 
     # Create ----------------------------------------------------------------------
+    logger.info("Creating Data")
     new_person: Person = Person(
         PersonType = "EM", NameStyle = 0, Title = "Mr", FirstName = "Tom", LastName = "Jerry", EmailPromotion = 1
     )
     new_person_id: int = person_service.create_person(new_person = new_person)
-    logger.debug(f"Created new Person with BusinessEntityID: {new_person_id}")
 
 
     # Edit ------------------------------------------------------------------------
@@ -66,13 +67,11 @@ def main():
     edited_person: Person = new_person
     edited_person.MiddleName = "Anderson"
     person_service.edit_person(id = new_person_id, edited_person = edited_person)
-    logger.debug(f"Edited Person with BusinessEntityID: {new_person_id}")
     
 
     # Delete ----------------------------------------------------------------------
     logger.info("Deleting Data")
     deleted_records: int = person_service.delete_person(id = new_person_id)
-    logger.debug(f"Deleted {deleted_records} records for Person with BusinessEntityID: {new_person_id}")
 
 
     # Disconnect ------------------------------------------------------------------

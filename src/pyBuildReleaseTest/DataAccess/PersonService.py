@@ -4,10 +4,12 @@ from pyBuildReleaseTest.DataModel.Person import Person
 from sqlalchemy import select, delete, CursorResult, Delete
 from pandas import DataFrame, read_sql_query
 from typing import Optional, Any
+from logging import getLogger, Logger
+
+
+logger: Logger = getLogger(__name__)
 
 class PersonService:
-    # TODO: add logging
-    # TODO: add schema validator
     def __init__(self, database_context: ApplicationDbContext) -> None:
         self._context: ApplicationDbContext = database_context
 
@@ -23,21 +25,27 @@ class PersonService:
     def check_person_exists(self, id: int) -> None:
         person_count: int = self._context.session.query(Person).where(Person.BusinessEntityID == id).count()
         if person_count == 0:
-            raise Exception(f"No records found for Person with BusinessEntityID {id}")
+            error_message = f"No records found for Person with BusinessEntityID {id}"
+            logger.error(error_message)
+            raise Exception(error_message)
 
     def get_person(self, id: int) -> Person:        
         query = select(Person).where(Person.BusinessEntityID == id)
         person: Person | None = self._context.session.scalars(query).first()
 
         if person is None:
-            raise Exception(f"No records found for Person with BusinessEntityID {id}")
+            error_message = f"No records found for Person with BusinessEntityID {id}"
+            logger.error(error_message)
+            raise Exception(error_message)
         
         return person
     
     def get_people_by_name(self, first_name: Optional[str] = None, last_name: Optional[str] = None) -> DataFrame:
         no_names_provided: bool = ((first_name is None) & (last_name is None))
         if no_names_provided:
-            raise Exception("Either first_name or last_name must be provided")
+            error_message = "Either first_name or last_name must be provided"
+            logger.error(error_message)
+            raise Exception(error_message)
         
         if last_name is None:
             query = select(Person).where(Person.FirstName == first_name)
@@ -60,6 +68,7 @@ class PersonService:
         self._context.session.add(new_person)
         self._context.session.commit()
 
+        logger.debug(f"Created new Person with BusinessEntityID: {new_business_entity_id}")
         return new_business_entity_id
 
     def edit_person(self, id: int, edited_person: Person) -> None:
@@ -74,6 +83,8 @@ class PersonService:
         old_person.ModifiedDate = edited_person.ModifiedDate
 
         self._context.session.commit()
+        logger.debug(f"Edited Person with BusinessEntityID: {id}")
+        return None
 
     def delete_person(self, id: int) -> int:
         self.check_person_exists(id = id)
@@ -90,4 +101,5 @@ class PersonService:
         self._context.session.commit()
 
         rows_affected: int = max(people_deleted, business_entities_deleted)
+        logger.debug(f"Deleted {rows_affected} records for Person with BusinessEntityID: {id}")
         return rows_affected
