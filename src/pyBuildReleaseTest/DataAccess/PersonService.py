@@ -25,7 +25,7 @@ class PersonService:
     def check_person_exists(self, id: int) -> None:
         person_count: int = self._context.session.query(Person).where(Person.BusinessEntityID == id).count()
         if person_count == 0:
-            error_message = f"No records found for Person with BusinessEntityID {id}"
+            error_message: str = f"No records found for Person with BusinessEntityID {id}"
             logger.error(error_message)
             raise Exception(error_message)
 
@@ -34,7 +34,7 @@ class PersonService:
         person: Person | None = self._context.session.scalars(query).first()
 
         if person is None:
-            error_message = f"No records found for Person with BusinessEntityID {id}"
+            error_message: str = f"No records found for Person with BusinessEntityID {id}"
             logger.error(error_message)
             raise Exception(error_message)
         
@@ -58,7 +58,7 @@ class PersonService:
         return people
 
     def create_person(self, new_person: Person) -> int:
-        new_business_entity = BusinessEntity()
+        new_business_entity: BusinessEntity = BusinessEntity()
         self._context.session.add(new_business_entity)
         self._context.session.commit()
         
