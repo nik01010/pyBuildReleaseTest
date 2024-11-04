@@ -2,6 +2,15 @@
 
 Python port of [rBuildReleaseTest](https://github.com/nik01010/rBuildReleaseTest)
 
+## Aims
+This PoC package is used to explore:
+
+- Creating robust queries for reading and writing data stored in a SQL database
+- Using object-oriented programming to encapsulate queries in classes
+- Setting up a logger with custom message formatting, applied throughout all layers of code
+- Writing unit tests for basic functions and integration-style tests for database queries
+- Creating a Continuous Integration (CI) pipeline that builds, checks and tests the R package, runs linting rules, and test coverage analysis
+
 ## Installation
 ### Local Build
 - pip install -q build
